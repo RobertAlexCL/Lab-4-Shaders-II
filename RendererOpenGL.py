@@ -15,29 +15,12 @@ screen = pygame.display.set_mode((width,height), pygame.DOUBLEBUF | pygame.OPENG
 clock = pygame.time.Clock()
 
 rend = Renderer(screen)
-rend.setShaders(shaders.vertex_shader, shaders.fragment_shader)
+rend.setShaders(shaders.vertex_shader_toon, shaders.fragment_shader_toon)
 
-vertex_data = np.array([-0.5,-0.5, 0.5, 1.0, 0.0, 0.0,
-                        -0.5, 0.5, 0.5, 0.0, 1.0, 0.0,
-                         0.5, 0.5, 0.5, 0.0, 0.0, 1.0,
-                         0.5,-0.5, 0.5, 1.0, 1.0, 0.0,
-                        -0.5,-0.5,-0.5, 1.0, 0.0, 1.0,
-                        -0.5, 0.5,-0.5, 0.0, 1.0, 1.0,
-                         0.5, 0.5,-0.5, 1.0, 1.0, 1.0,
-                         0.5,-0.5,-0.5, 0.0, 0.0, 0.0], dtype = np.float32)
+face = Model('model.obj', 'model.bmp')
+face.position.z = -5
 
-index_data = np.array([0,1,3, 1,2,3,
-                       1,5,2, 5,6,2,
-                       4,5,0, 5,1,0,
-                       3,2,7, 6,2,7,
-                       4,0,7, 0,3,7,
-                       5,4,6, 4,7,6], dtype = np.uint32)
-
-cube = Model(vertex_data, index_data )
-
-cube.position.z = -5.0
-
-rend.scene.append( cube )
+rend.scene.append( face )
 
 
 isRunning = True
@@ -82,6 +65,15 @@ while isRunning:
                 rend.filledMode()
             if ev.key == K_2:
                 rend.wireframeMode()
+            if ev.key == K_3:
+                rend.setShaders(shaders.vertex_shader_toon, shaders.fragment_shader_toon)
+            if ev.key == K_4:
+                rend.setShaders(shaders.vertex_shader_color, shaders.fragment_shader_color)
+
+            if ev.key == K_5:
+                rend.setShaders(shaders.vertex_shader_inflado, shaders.fragment_shader_inflado)
+            if ev.key == K_6:
+                rend.setShaders(shaders.vertex_shader_tiempo, shaders.fragment_shader_tiempo)
 
     rend.tiempo += deltaTime
     deltaTime = clock.tick(60) / 1000
